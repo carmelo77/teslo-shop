@@ -8,6 +8,7 @@ import { CategoriesModule } from './categories/categories.module';
 import { TypeOrmQueryLogger } from './commons/interceptors/query-logger.interceptor';
 import { SeedModule } from './seed/seed.module';
 import { databaseConfig } from './config/database.config';
+import { FilesModule } from './files/files.module';
 
 @Module({
   imports: [
@@ -19,7 +20,8 @@ import { databaseConfig } from './config/database.config';
     ProductsModule,
     CommonsModule,
     CategoriesModule,
-    SeedModule
+    SeedModule,
+    FilesModule
   ],
 })
 export class AppModule {}
