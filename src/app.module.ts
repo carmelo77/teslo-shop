@@ -9,6 +9,7 @@ import { TypeOrmQueryLogger } from './commons/interceptors/query-logger.intercep
 import { SeedModule } from './seed/seed.module';
 import { databaseConfig } from './config/database.config';
 import { FilesModule } from './files/files.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -21,7 +22,8 @@ import { FilesModule } from './files/files.module';
     CommonsModule,
     CategoriesModule,
     SeedModule,
-    FilesModule
+    FilesModule,
+    AuthModule
   ],
 })
 export class AppModule {}

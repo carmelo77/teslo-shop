@@ -3,6 +3,7 @@ import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, ManyToOne
 import { ProductsGenderEnum } from "../enum/products-gender.enum";
 import { Category } from "../../categories/entities/category.entity";
 import { ProductImage } from "./product-image.entity";
+import { User } from "src/auth/entities/user.entity";
 
 @Entity({ name: 'products' })
 export class Product {
@@ -57,6 +58,13 @@ export class Product {
         { cascade: true }
     )
     images?: ProductImage[]
+
+    @ManyToOne( 
+        () => User,
+        (user) => user.product,
+        { eager: false }
+    )
+    user: User;
 
     @BeforeInsert()
     checkSlugInsert(): void {

@@ -13,6 +13,7 @@ import { CriteriaDto } from '../commons/dtos/criteria.dto';
 import { ProductImage } from './entities/product-image.entity';
 import { QueryBuilder } from 'typeorm/browser';
 import { SelectQueryBuilder } from 'typeorm/browser';
+import { User } from 'src/auth/entities/user.entity';
 
 @Injectable()
 export class ProductsService {
@@ -30,12 +31,13 @@ export class ProductsService {
     private readonly dataSource: DataSource
   ) {}
 
-  async create(createProductDto: CreateProductDto) {
+  async create(createProductDto: CreateProductDto, user: User) {
     try {
       const { images = [], ...rest } = createProductDto;
 
       const product = this.repository.create({
         ...rest,
+        user,
         images: images.map(image => this.productImageRepository.create({ url: image }))
       });
 
@@ -98,15 +100,14 @@ export class ProductsService {
     return product;
   }
 
-  async update(id: string, updateProductDto: UpdateProductDto): Promise<Product> {
+  async update(id: string, updateProductDto: UpdateProductDto, user: User): Promise<Product> {
 
     const { images, ...rest } = updateProductDto;
 
-
-
     const product = await this.repository.preload({
       id,
-      ...rest
+      ...rest,
+      user
     });
 
     if (!product) {
@@ -148,6 +149,17 @@ export class ProductsService {
       await this.findOne(id);
 
       return await this.repository.delete(id);
+    } catch (error) {
+      this.logger.error(error);
+      return handleExceptions(error);
+    }
+  }
+
+  async deleteAllProducts() {
+    try {
+      const query = this.repository.createQueryBuilder('product').delete().where({});
+      await query.execute();
+      return { message: 'All products have been deleted' };
     } catch (error) {
       this.logger.error(error);
       return handleExceptions(error);

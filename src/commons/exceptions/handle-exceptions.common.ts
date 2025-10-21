@@ -7,6 +7,5 @@ export const handleExceptions = (error: unknown) => {
         throw new BadRequestException(`The value for '${field}' already exists`);
     }
 
-    console.error(error);
     throw new InternalServerErrorException('Internal server error');
 }
